@@ -1,0 +1,73 @@
+﻿@model Restaurante.Models.Pedido
+
+@{
+    ViewData["Title"] = "Novo Pedido";
+}
+
+<div class="container mt-5">
+    <h2>Fazer Novo Pedido</h2>
+    <hr />
+
+    <form asp-action="Criar" method="post">
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="NomeSolicitante" class="form-label">Nome do Cliente</label>
+                <input asp-for="NomeSolicitante" class="form-control" required />
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Mesa" class="form-label">Número da Mesa</label>
+                <input asp-for="Mesa" type="number" class="form-control" required />
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row p-3 mb-3 bg-light rounded border-start border-danger border-4">
+            <div class="col-md-8 mb-3">
+                <label class="form-label fw-bold text-danger">Pratos</label>
+                <select name="PratoId" class="form-select">
+                    <option value="">-- Nenhum prato selecionado --</option>
+                    @foreach (var prod in ViewBag.Produtos)
+                    {
+                        if (prod.Tipo == Restaurante.Models.TipoProduto.Prato)
+                        {
+                            <option value="@prod.Id">@prod.Nome - R$ @prod.Preco.ToString("F2")</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Quantidade (Prato)</label>
+                <input name="QtdPrato" type="number" class="form-control" value="1" min="1" />
+            </div>
+        </div>
+
+        <div class="row p-3 mb-4 bg-light rounded border-start border-primary border-4">
+            <div class="col-md-8 mb-3">
+                <label class="form-label fw-bold text-primary">Bebidas</label>
+                <select name="BebidaId" class="form-select">
+                    <option value="">-- Nenhuma bebida selecionada --</option>
+                    @foreach (var prod in ViewBag.Produtos)
+                    {
+                        if (prod.Tipo == Restaurante.Models.TipoProduto.Bebida)
+                        {
+                            <option value="@prod.Id">@prod.Nome - R$ @prod.Preco.ToString("F2")</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Quantidade (Bebida)</label>
+                <input name="QtdBebida" type="number" class="form-control" value="1" min="1" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success px-4">Enviar Pedido</button>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </div>
+
+    </form>
+</div>

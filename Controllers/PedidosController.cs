@@ -19,16 +19,62 @@ namespace Restaurante.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cria(Pedido novoPedido)
+        public IActionResult Criar(string nomeSolicitante, int mesa, int? pratoId, int? qtdPrato, int? bebidaId, int? qtdBebida)
         {
-            if (ModelState.IsValid)
+            if (pratoId == null && bebidaId == null)
             {
-                MockPedidosRepository.AdicionarPedido(novoPedido);
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", "Você precisa selecionar pelo menos um prato ou uma bebida.");
+                ViewBag.Produtos = MockPedidosRepository.Produtos;
+                return View();
             }
 
-            ViewBag.Produtos = MockPedidosRepository.Produtos;
-            return View(novoPedido);
+            if (pratoId != null)
+            {
+                var pedidoPrato = new Pedido
+                {
+                    NomeSolicitante = nomeSolicitante,
+                    Mesa = mesa,
+                    ProdutoId = pratoId.Value,
+                    Quantidade = qtdPrato ?? 1,
+                    Status = StatusPedido.Preparando
+                };
+                MockPedidosRepository.AdicionarPedido(pedidoPrato);
+            }
+
+            if (bebidaId != null)
+            {
+                var pedidoBebida = new Pedido
+                {
+                    NomeSolicitante = nomeSolicitante,
+                    Mesa = mesa,
+                    ProdutoId = bebidaId.Value,
+                    Quantidade = qtdBebida ?? 1,
+                    Status = StatusPedido.Preparando
+                };
+                MockPedidosRepository.AdicionarPedido(pedidoBebida);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public IActionResult AtualizarStatus(int id)
+        {
+            var pedido = MockPedidosRepository.Pedidos.FirstOrDefault(p => p.Id == id);
+
+            if (pedido != null)
+            {
+                if (pedido.Status == StatusPedido.Preparando)
+                {
+                    pedido.Status = StatusPedido.Pronto;
+                }
+                else if (pedido.Status == StatusPedido.Pronto)
+                {
+                    pedido.Status = StatusPedido.Entregue;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
