@@ -76,5 +76,24 @@ namespace Restaurante.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Cozinha()
+        {
+            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
+                .Where(p => MockPedidosRepository.Produtos
+                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Prato)
+            .ToList();
+
+            return View(pedidos);
+        }
+        public IActionResult Copa()
+        {
+            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
+                .Where(p => MockPedidosRepository.Produtos
+                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Bebida)
+                .ToList();
+
+            return View(pedidos);
+        }
+
     }
 }
