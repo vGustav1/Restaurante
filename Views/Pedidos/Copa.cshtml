@@ -6,7 +6,7 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Pedidos - Copa</h2>
+    <h2 class="mb-4">Copa</h2>
 
     <table class="table table-striped table-hover mt-3">
         <thead class="table-dark">
@@ -44,6 +44,7 @@
                         @if (pedido.Status != StatusPedido.Entregue)
                         {
                             <form asp-action="AtualizarStatus" asp-route-id="@pedido.Id" method="post" class="d-inline">
+                                <input type="hidden" name="origem" value="Copa" />
                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Avançar Status</button>
                             </form>
                         }

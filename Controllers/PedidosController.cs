@@ -6,18 +6,21 @@ namespace Restaurante.Controllers
 {
     public class PedidosController : Controller
     {
+        
         public IActionResult Index()
         {
             var pedidos = MockPedidosRepository.ObterTodosOsPedidos();
             return View(pedidos);
         }
 
+        
         public IActionResult Criar()
         {
             ViewBag.Produtos = MockPedidosRepository.Produtos;
             return View();
         }
 
+        
         [HttpPost]
         public IActionResult Criar(string nomeSolicitante, int mesa, int? pratoId, int? qtdPrato, int? bebidaId, int? qtdBebida)
         {
@@ -56,8 +59,42 @@ namespace Restaurante.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        
+        public IActionResult Cozinha()
+        {
+            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
+                .Where(p => MockPedidosRepository.Produtos
+                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Prato)
+                .ToList();
+
+            return View(pedidos);
+        }
+
+       
+        public IActionResult Copa()
+        {
+            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
+                .Where(p => MockPedidosRepository.Produtos
+                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Bebida)
+                .ToList();
+
+            return View(pedidos);
+        }
+
+        
+        public IActionResult Historico()
+        {
+            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
+                .Where(p => p.Status == StatusPedido.Entregue)
+                .ToList();
+
+            return View(pedidos);
+        }
+
+        
         [HttpPost]
-        public IActionResult AtualizarStatus(int id)
+        public IActionResult AtualizarStatus(int id, string origem)
         {
             var pedido = MockPedidosRepository.Pedidos.FirstOrDefault(p => p.Id == id);
 
@@ -73,27 +110,7 @@ namespace Restaurante.Controllers
                 }
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(origem);
         }
-
-        public IActionResult Cozinha()
-        {
-            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
-                .Where(p => MockPedidosRepository.Produtos
-                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Prato)
-            .ToList();
-
-            return View(pedidos);
-        }
-        public IActionResult Copa()
-        {
-            var pedidos = MockPedidosRepository.ObterTodosOsPedidos()
-                .Where(p => MockPedidosRepository.Produtos
-                    .First(prod => prod.Id == p.ProdutoId).Tipo == TipoProduto.Bebida)
-                .ToList();
-
-            return View(pedidos);
-        }
-
     }
 }

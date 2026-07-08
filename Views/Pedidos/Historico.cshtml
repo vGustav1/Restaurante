@@ -2,14 +2,11 @@
 @using Restaurante.Models
 
 @{
-    ViewData["Title"] = "Todos os Pedidos";
+    ViewData["Title"] = "Histórico";
 }
 
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Pedidos</h2>
-        <a asp-action="Criar" class="btn btn-primary">Lançar Novo Pedido</a>
-    </div>
+    <h2 class="mb-4">Histórico de Pedidos Finalizados</h2>
 
     <table class="table table-striped table-hover mt-3">
         <thead class="table-dark">
@@ -18,8 +15,9 @@
                 <th>Cliente</th>
                 <th>Mesa</th>
                 <th>Produto</th>
-                <th>Tipo</th>
                 <th>Qtd</th>
+                <th>Total</th>
+                <th>Data/Hora</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -27,19 +25,24 @@
             @foreach (var pedido in Model)
             {
                 var produto = MockPedidosRepository.Produtos.FirstOrDefault(p => p.Id == pedido.ProdutoId);
+                var total = produto != null ? produto.Preco * pedido.Quantidade : 0;
 
                 <tr>
                     <td>@pedido.Id</td>
                     <td>@pedido.NomeSolicitante</td>
                     <td>@pedido.Mesa</td>
-                    <td>@(produto != null ? produto.Nome : "Produto não encontrado")</td>
-                    <td>@(produto != null ? produto.Tipo.ToString() : "-")</td>
+                    <td>@(produto != null ? produto.Nome : "-")</td>
                     <td>@pedido.Quantidade</td>
-                    <td>
-                        <span class="badge bg-warning text-dark">@pedido.Status</span>
-                    </td>
+                    <td>@total.ToString("C")</td>
+                    <td>@pedido.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><span class="badge bg-success">@pedido.Status</span></td>
                 </tr>
             }
         </tbody>
     </table>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Nenhum pedido finalizado ainda.</p>
+    }
 </div>

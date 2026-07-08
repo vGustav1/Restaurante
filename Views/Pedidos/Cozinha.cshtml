@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Restaurante.Models.Pedido>
 @using Restaurante.Models
 
-
 @{
     ViewData["Title"] = "Cozinha";
 }
 
-<div> class="container mt-5"
-    <h2 class="mb-4">Pedidos - Cozinha</h2>
+<div class="container mt-5">
+    <h2 class="mb-4">Cozinha</h2>
+
     <table class="table table-striped table-hover mt-3">
         <thead class="table-dark">
             <tr>
@@ -24,6 +24,7 @@
             @foreach (var pedido in Model)
             {
                 var produto = MockPedidosRepository.Produtos.FirstOrDefault(p => p.Id == pedido.ProdutoId);
+
                 var corBadge = pedido.Status switch
                 {
                     StatusPedido.Preparando => "bg-warning text-dark",
@@ -31,6 +32,7 @@
                     StatusPedido.Entregue => "bg-success",
                     _ => "bg-secondary"
                 };
+
                 <tr>
                     <td>@pedido.Id</td>
                     <td>@pedido.NomeSolicitante</td>
@@ -42,6 +44,7 @@
                         @if (pedido.Status != StatusPedido.Entregue)
                         {
                             <form asp-action="AtualizarStatus" asp-route-id="@pedido.Id" method="post" class="d-inline">
+                                <input type="hidden" name="origem" value="Cozinha" />
                                 <button type="submit" class="btn btn-sm btn-outline-secondary">Avançar Status</button>
                             </form>
                         }
@@ -52,5 +55,6 @@
                     </td>
                 </tr>
             }
-        </tbody>"
+        </tbody>
+    </table>
 </div>
