@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Restaurante.Models;
 using System.Linq;
 
 namespace Restaurante.Controllers
 {
+    [Authorize]
     public class PedidosController : Controller
     {
         
