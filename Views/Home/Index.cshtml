@@ -1,8 +1,64 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Restaurante.Models
+@{
+    ViewData["Title"] = "Início";
+
+    var pedidos = MockPedidosRepository.ObterTodosOsPedidos();
+    var emPreparo = pedidos.Count(p => p.Status == StatusPedido.Preparando);
+    var prontos = pedidos.Count(p => p.Status == StatusPedido.Pronto);
+    var entregues = pedidos.Count(p => p.Status == StatusPedido.Entregue);
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-hero">
+    <h1>Sistema de Pedidos</h1>
+    <a asp-controller="Pedidos" asp-action="Criar" class="btn btn-light">Lançar Novo Pedido</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-numero">@emPreparo</div>
+            <div class="stat-label">Em preparo</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-numero">@prontos</div>
+            <div class="stat-label">Prontos</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card stat-entregue">
+            <div class="stat-numero">@entregues</div>
+            <div class="stat-label">Entregues</div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mb-3" style="color: var(--azul-escuro);">Acesso rápido</h5>
+
+<div class="row g-3">
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Pedidos" asp-action="Index" class="atalho-card">
+            <h5>Pedidos</h5>
+            <p>Visão geral de todos os pedidos lançados</p>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Pedidos" asp-action="Cozinha" class="atalho-card">
+            <h5>Cozinha</h5>
+            <p>Pedidos de pratos em andamento</p>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Pedidos" asp-action="Copa" class="atalho-card">
+            <h5>Copa</h5>
+            <p>Pedidos de bebidas em andamento</p>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Pedidos" asp-action="Historico" class="atalho-card">
+            <h5>Histórico</h5>
+            <p>Pedidos finalizados e valores</p>
+        </a>
+    </div>
 </div>
