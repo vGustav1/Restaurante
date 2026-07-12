@@ -18,7 +18,7 @@ Sistema para gerenciamento de pedidos de restaurante, desenvolvido em ASP.NET Co
 
 ## Como executar
 
-1. Clone o repositório e abra `Restaurante.sln` no Visual Studio
+1. Clone o repositório e abra `Restaurante.slnx` no Visual Studio
 2. Deixe os pacotes NuGet restaurarem automaticamente
 3. No **Console do Gerenciador de Pacotes**, rode:
    ```
